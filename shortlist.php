@@ -24,6 +24,12 @@ $name = $row['companyname'];
 <link rel="stylesheet" type="text/css" href="styles/main_styles.css">
 <link rel="stylesheet" type="text/css" href="styles/responsive.css">
 <link rel="stylesheet" type="text/css" href="style.css">
+	
+	<link href="DataTable/Responsive-2.2.2/css/responsive.dataTables.min.css" rel="stylesheet" type="text/css" />
+<link href="DataTable/DataTables-1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="styles/contact_styles.css">
+<link rel="stylesheet" type="text/css" href="styles/contact_responsive.css">
+	<noscript><link rel="stylesheet" type="text/css" href="css/noJS.css" /></noscript>
 </head>
 
 <body>
@@ -88,7 +94,7 @@ $name = $row['companyname'];
 						<div class="header_search">
 							<div class="header_search_content">
 								<div class="header_search_form_container">
-									<form action="searchproduct.php" class="header_search_form clearfix" method="post">
+									<form action="requestsbefore.php" class="header_search_form clearfix" method="post">
 										
 										<input name="product" id="product"  type="text" required class="header_search_input" placeholder="Search for products...">
 										
@@ -333,106 +339,103 @@ $profiles = "SELECT COUNT(*) FROM requisitions WHERE status ='Pending' and supid
 		</div>
 
 	</header>
-      
-  <div class="select_container" >  
+	<div class="sub_container">
+	    
+  <div class="select_table" style="max-width:400px;
+	width: 100%;
+	float: left;
+	margin: 0 auto;
+	margin-bottom: 5%;
+	margin-left: 2%;						  
+	position:relative;" >  
    
-    <form id="contact"  method="post">
-    
-    <label>
-    <h4 style="font-size: 18px">Requests</h4></label>
-    <?php
-	include('dbconfig.php');
-		error_reporting(0);
+	
+<form id="" method="post"  enctype="multipart/form-data" >
+<label><h4 style="font-size: 18px">Requests</h4></label>	
+<table  class="table table-hover" id="products">
+<thead>
+	<tr>
+	     <th>ReqId</th>
+         <th>Supplier</th>
+		<th>View</th>
+		
+	    
+	</tr>
+</thead>
+<tbody>	
+<?php
+     
 		$sl = "SELECT * FROM shortlist WHERE cusid='$taskOwner'";
         $query = mysqli_query($db, $sl);
         while($row = mysqli_fetch_array($query)){
-		$requestid = $row['requestid'];
 		
-    ?>
-     <ul>
-     	<a name="chose"  href="shortlist.php?requestid=<?php echo $requestid;?>">
-     	<li><?php error_reporting(0); echo ($requestid);?></li>
-     	</a>
 		
-     	
-     </ul>
-     <?php 
+	?>
+       <tr>
+       		<td><a href="shortlist.php?requestid=<?php echo $row['requestid'];?>"><?php echo $row['requestid'];
+				//echo $row['requestid'];?></a></td>
+       		<td><?php echo $row['supid']; ?></td>
+            <td><a href="shortlist.php?supid=<?php echo $row['supid'];?>" class="btn btn-success">View</a>
+		   </td>
+    		
+       </tr>	
+        <?php
 		}
 		
-		?>
-		
-     
-     </form>
+
+?>
+</tbody>
+</table>
+	</form>
+	
+
    </div>
 	
+	<div class="edit_profile_container" style="margin:auto; margin-right: 10%;" id="test">  
+  
+    <div  class="col-lg-10" style="margin: auto;">
 	
-<div  class="productview" >
-<div  class="col-lg-10" style="margin: auto;">
+<form id="" method="post"  enctype="multipart/form-data" >
 
-<form id="frm-example" action="shortlist.php" method="POST">
 <table align="center" class="table table-hover " id="products">
+	<label><h4 style="font-size: 18px">Product Details</h4></label>
 	<thead>
 		<tr>
-			<td>Item</td>
-			<td>Description</td>
+			<td>Product</td>
+			<td>Price</td>
+			<td>Quantity</td>
+			<td>Exc.tax</td>
+			<td>Incl.tax</td>
 		</tr>
 	</thead>
 <tbody>	
- <tr>
+
 <?php
 	include('dbconfig.php');
 	error_reporting(0);
-	if (isset($_GET['requestid'])){
-			$reqid=$_GET["requestid"];
-		
-		$findsup = "select * from quotations where requestid = '$reqid'";
-		$supresult = mysqli_query($db,$findsup);
-		foreach($supresult as $row){
-			$sup = $row['supid'];
-			$pname = $row['pname'];
-			$price = $row['price'];
-			$quantity = $row['quantity'];
-			$total = $row['total'];
-		?>
-	 <td> <label >Name:</label><label ><?php  echo $pname; ?></label></br>
-		   <label >Price:</label><label ><?php echo $price; ?></label>
-	</br>
-		<label >Description:</label><label ><?php echo $quantity; ?></label>
-		</br>
-		<label >Description:</label><label ><?php echo $total; ?></label>
-	</td>
-	 <?php
-		}
-	 
-		
-		$sql_query = "SELECT * FROM products WHERE category ='$catname'";
+
+		 
+			$sql_query = "SELECT * FROM accounts WHERE clientid = '$taskOwner' order by date desc limit 5" ;
 		
 	$result = mysqli_query($db,$sql_query);
 		while($row = mysqli_fetch_array($result)){
 		//echo $row['maid'];
 		
 	?>
-      
+       <tr >
 		  
        		
-       		<td>
-				<label >Name:</label><label ><?php  echo $row['pname']; ?></label></br>
-		   <label >Price:</label><label ><?php echo $row['price']; ?></label>
-	</br>
-		<label >Description:</label><label ><?php echo $row['description']; ?></label>
-	
-		</br>
-	<a href="singleprod.php?prodid=<?php echo $row['prodid'];?>" class="btn btn-success">View</a>
-		   </td>
+       		<td><label ><?php echo $row['date']; ?></label></td>
+           <td><label ><?php echo $row['topup']; ?></label></td>
+           <td><label ><?php echo ($row['quotefee']); ?></label></td>
+           <td><label ><?php echo $row['balance']; ?></label></td>
+		   <td><label ><?php echo ($row['quotefee']); ?></label></td>
+           
             
       		
        </tr>	
         <?php
 		}
-		
-	}
-	
-	
 	
 
 ?>
@@ -444,8 +447,67 @@ $profiles = "SELECT COUNT(*) FROM requisitions WHERE status ='Pending' and supid
 	</form>
 
 </div>
+     
+   </div>
+		
+	<div class="edit_profile_container" style="margin:auto; margin-right: 10%;" id="test">  
+  
+    <div  class="col-lg-10" style="margin: auto;">
+	
+<form id="" method="post"  enctype="multipart/form-data" >
+
+<table align="center" class="table table-hover " id="products">
+	<label><h4 style="font-size: 18px">Supplier Details</h4></label>
+	<thead>
+		<tr>
+			<td>Date</td>
+			<td>Top Up</td>
+			<td>Quote Fee</td>
+			<td>Balance</td>
+		</tr>
+	</thead>
+<tbody>	
+
+<?php
+	include('dbconfig.php');
+	error_reporting(0);
+
+		 
+			$sql_query = "SELECT * FROM accounts WHERE clientid = '$taskOwner' order by date desc limit 5" ;
+		
+	$result = mysqli_query($db,$sql_query);
+		while($row = mysqli_fetch_array($result)){
+		//echo $row['maid'];
+		
+	?>
+       <tr >
+		  
+       		
+       		<td><label ><?php echo $row['date']; ?></label></td>
+           <td><label ><?php echo $row['topup']; ?></label></td>
+           <td><label ><?php echo ($row['quotefee']); ?></label></td>
+           <td><label ><?php echo $row['balance']; ?></label></td>
+            
+      		
+       </tr>	
+        <?php
+		}
+	
+
+?>
+</tbody>
+<tfoot>
+</tfoot>
+</table>
+ 
+	</form>
+
+</div>
+     
+   </div>
 
 	</div>
+  
 	
 		<!-- Footer -->
 
@@ -520,9 +582,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 <script src="plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
 <script src="plugins/parallax-js-master/parallax.min.js"></script>
 <script src="plugins/easing/easing.js"></script>
-<script src="js/blog_custom.js"></script
-
-><script>
+<script src="js/blog_custom.js"></script> 
+		<script>
     function showhide()
      {
            var div = document.getElementById("bankcontainer");
@@ -552,19 +613,102 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		 
      }
   </script>
-<script>
-function getId(val){
-	$.ajax({
-				type:"POST",
-				url:"ajax.php",
-				data:"catid="+ val,
-				success:function(data){
-					$("#sup").html(data);
-					}
-				
-				});
-	}
+<script src="DataTable/DataTables-1.10.16/js/jquery.dataTables.min.js" type="text/javascript"></script>
+	<script src="DataTable/Responsive-2.2.2/js/dataTables.responsive.min.js" type="text/javascript"></script>
+	
+	<script type="text/javascript">
 
+			function DropDown(el) {
+				this.dd = el;
+				this.initEvents();
+			}
+			DropDown.prototype = {
+				initEvents : function() {
+					var obj = this;
+
+					obj.dd.on('click', function(event){
+						$(this).toggleClass('active');
+						event.stopPropagation();
+					});	
+				}
+			}
+
+			$(function() {
+
+				var dd = new DropDown( $('#dd') );
+
+				$(document).click(function() {
+					// all dropdowns
+					$('.wrapper-dropdown-5').removeClass('active');
+				});
+
+			});
+
+		</script>
+		
+<script>
+ 
+	/* Define two custom functions (asc and desc) for string sorting */
+jQuery.fn.dataTableExt.oSort['string-case-asc']  = function(x,y) {
+	return ((x < y) ? -1 : ((x > y) ?  1 : 0));
+};
+
+jQuery.fn.dataTableExt.oSort['string-case-desc'] = function(x,y) {
+	return ((x < y) ?  1 : ((x > y) ? -1 : 0));
+};
+	
+$(document).ready(function() {
+	
+    var table = $('#products').DataTable({
+		"responsive": true,
+		"pageLength": 5,
+		"sDom": 'tpri',
+        "columnDefs": [
+            { "visible": false, "targets": 0 }
+        ],
+        "order": [[ 0, 'asc' ]],
+       
+        "drawCallback": function ( settings ) {
+            var api = this.api();
+            var rows = api.rows( {page:'current'} ).nodes();
+
+            var last=null;
+ 
+            var groupadmin = []; 
+ 
+            api.column(0, {page:'current'} ).data().each( function ( group, i ) {
+
+                if ( last !== group ) {
+  
+                    $(rows).eq( i ).before(
+                        '<tr class="group" id="'+i+'"><td colspan="8">'+group+'</td></tr>'
+                    );
+                    groupadmin.push(i);
+                    last = group;
+                }
+            } );
+            
+            for( var k=0; k < groupadmin.length; k++){
+// Code added for adding class to sibling elements as "group_<id>"  
+                  $("#"+groupadmin[k]).nextUntil("#"+groupadmin[k+1]).addClass(' group_'+groupadmin[k]); 
+               // Code added for adding Toggle functionality for each group
+                    $("#"+groupadmin[k]).click(function(){
+                        var gid = $(this).attr("id");
+                         var sh = $(".group_"+gid);
+							 
+							 sh.slideToggle();
+                    });
+                 
+            }
+        }
+		
+	
+    } );
+	
+	 
+         
+	
+} );
 </script>
 
 </body>

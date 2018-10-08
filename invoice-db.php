@@ -2,17 +2,19 @@
 include('dbconfig.php');
 include('fpdf17/fpdf.php');
 include('phpmailer/PHPMailerAutoload.php');
+include('generatepass.php'); 
 //get invoices data
 if (isset($_GET['qouteid'])){
               
- $qid=$_GET["qouteid"];
+$qid=$_GET["qouteid"];
 $query = mysqli_query($db,"select * from qoutations where qouteid = '$qid'");
 
 
 foreach ($query as $row){
-	
-			  $customer = $row['cusid'];
-	          $suplier = $row['supid'];
+	$creating = new CreatePass();
+$pseudoid = $creating->randomPassword();
+	$customer = $row['cusid'];
+	$suplier = $row['supid'];
 	$reqid = $row['requestid'];
 	$pname = $row['pname'];
 	$price = $row['price'];
@@ -26,7 +28,7 @@ foreach ($query as $row){
 $query1 = mysqli_query($db,"select * from clients where companyid = '$suplier'");
 foreach ($query1 as $row1){
 	
-			  $company = $row1['companyname'];
+	$company = $row1['companyname'];
 	$address = $row1['address'];
 	$email = $row1['email'];
 	$landline = $row1['telephone'];
@@ -47,24 +49,24 @@ $pdf->SetFont('Arial','B',14);
 
 //Cell(width , height , text , border , end line , [align] )
 
-$pdf->Cell(130	,5,$company,0,0);
-$pdf->Cell(59	,5,'Qoutations',0,1);//end of line
+$pdf->Cell(130	,5,'Quotation For',0,0);
+$pdf->Cell(59	,5,'Sent By',0,1);//end of line
 
 //set font to arial, regular, 12pt
 $pdf->SetFont('Arial','',12);
 
-$pdf->Cell(130	,5,$address,0,0);
-$pdf->Cell(59	,5,'',0,1);//end of line
+$pdf->Cell(130	,5,$reqid,0,0);
+$pdf->Cell(59	,5,$pseudoid,0,1);//end of line
 
-$pdf->Cell(130	,5,$email,0,0);
+$pdf->Cell(130	,5,'',0,0);
 $pdf->Cell(25	,5,'Date',0,0);
 $pdf->Cell(34	,5,$date,0,1);//end of line
 
-$pdf->Cell(130	,5,$cell,0,0);
-$pdf->Cell(25	,5,'Qoutation #',0,0);
+$pdf->Cell(130	,5,'',0,0);
+$pdf->Cell(25	,5,'Qoutation id',0,0);
 $pdf->Cell(34	,5,$qid,0,1);//end of line
 
-$pdf->Cell(130	,5,$landline,0,0);
+$pdf->Cell(130	,5,'',0,0);
 //$pdf->Cell(25	,5,'Customer ID',0,0);
 //$pdf->Cell(34	,5,$company2 ,0,1);//end of line
 
@@ -72,11 +74,11 @@ $pdf->Cell(130	,5,$landline,0,0);
 $pdf->Cell(189	,10,'',0,1);//end of line
 
 //billing address
-$pdf->Cell(100	,5,'Bill to',0,1);//end of line
+/*$pdf->Cell(100	,5,'Bill to',0,1);//end of line
 $query2 = mysqli_query($db,"select * from clients where companyid = '$customer'");
 foreach ($query2 as $row2){
 	
-			  $company2= $row2['companyname'];
+	$company2= $row2['companyname'];
 	$address2 = $row2['address'];
 	$email2 = $row2['email'];
 	$landline2 = $row2['telephone'];
@@ -98,7 +100,7 @@ $pdf->Cell(10	,5,'',0,0);
 $pdf->Cell(90	,5,$cell2,0,1);
 
 //make a dummy empty cell as a vertical spacer
-$pdf->Cell(189	,10,'',0,1);//end of line
+$pdf->Cell(189	,10,'',0,1);//end of line*/
 
 //invoice contents
 $pdf->SetFont('Arial','B',12);

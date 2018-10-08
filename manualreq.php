@@ -17,6 +17,8 @@ if(isset($_POST['enter'])){
 	$date = date('Y-m-d H:i:s');
 	
 	$Hours = (strtotime($end) - strtotime($date)) / 3600;
+	//$Hours = $date->diff($end); //$duration is a DateInterval object
+    //$Hours->format("%H:%I:%S");
 	
 	//create request id
 	$sql_query = "select counter from counter where counterid = '6'";
@@ -67,7 +69,7 @@ if(isset($_POST['enter'])){
 	        
 			'Product name:'.$pname.'<br/>'. 
 		    'Quantity:'.$quantity.'<br/>'. 
-		    'Expected Lead time:'.$Hours.'<br/>'.
+		    'Expected Lead time:'.$Hours.'hrs'.'<br/>'.
 			'Description:'.$description.'<br/>'.
 			'Log in at www.fastquoteonline.co.zw';
 	
@@ -186,7 +188,7 @@ $mail->send();
 	        
 			'Product name:'.$pname.'<br/>'. 
 		    'Quantity:'.$quantity.'<br/>'. 
-		    'Expected Lead time:'.$Hours.'<br/>'.
+		    'Expected Lead time:'.$Hours.'hrs'.'<br/>'.
 			'Description:'.$description.'<br/>'.
 			'Log in at www.fastquoteonline.co.zw';
 	

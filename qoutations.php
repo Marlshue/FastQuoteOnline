@@ -448,11 +448,10 @@ $profiles = "SELECT COUNT(*) FROM requisitions WHERE status ='Pending' and supid
 	<div class="request" id="test">  
  
     <form id="contact" 
-		  action="slnotify.php?supid=<?php foreach($_POST['check_list'] as $selected) {
-			$result_explode = explode('|', $selected);
-	echo $result_explode[0]; }?>&amp;requestid=<?php foreach($_POST['check_list'] as $selected) {
-			$result_explode = explode('|', $selected);
-	echo $result_explode[1]; }?>" 
+		  action="slnotify.php?requestid=<?php foreach($_POST['check_list'] as $selected) 
+{
+			$result_explode = explode('|', $selected);}
+				  echo $result_explode[1];?>" 
 		  method="post">
 		
    <label>
@@ -462,7 +461,14 @@ $profiles = "SELECT COUNT(*) FROM requisitions WHERE status ='Pending' and supid
 		<?php
 	if(isset($_POST['submit'])){
 	if(!empty($_POST['check_list'])) {
-	
+	/*action="slnotify.php?supid=<?php foreach($_POST['check_list'] as $selected) {
+			$result_explode = explode('|', $selected);
+	echo $result_explode[0]; }?>&amp;requestid=<?php foreach($_POST['check_list'] as $selected) {
+			$result_explode = explode('|', $selected);
+	echo $result_explode[1]; }?>"
+	send more than one value to the next page
+	*/
+		
 	//Counting number of checked checkboxes 
 	$checked_count = count($_POST['check_list']);
 	$checked = $_POST['check_list'];
