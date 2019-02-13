@@ -1,2 +1,0 @@
-# FastQuoteOnline
-Quotation Generation
